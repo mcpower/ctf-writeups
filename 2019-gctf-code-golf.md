@@ -414,8 +414,8 @@ g=(""?).(dropWhile q.dropWhileEnd q<$>)
 ```
 
 We were a bit stuck here, so we took a look at the
-[Code Golf Stack Exchange thread](cgse) for a bit of inspiration.
-There's a [neat trick](iflist) when a conditional returns either an empty list
+[Code Golf Stack Exchange thread][cgse] for a bit of inspiration.
+There's a [neat trick][iflist] when a conditional returns either an empty list
 or another list - list comprehensions! This helps a lot with `(#)`, and is
 doubly useful as we needed to map over the remaining `b#d` list anyway.
 However, what do we put in the hole (`_`) here?
@@ -426,7 +426,7 @@ However, what do we put in the hole (`_`) here?
 
 It needs to be either `a` or `c`, depending on which one is a space or not.
 We're guaranteed that one of them *is* a space... so is there a nice way of
-representing the hole? Recalling [another answer](spaceless) from the Code Golf
+representing the hole? Recalling [another answer][spaceless] from the Code Golf
 Stack Exchange thread, space is less than all printable ASCII!
 Therefore, taking the `max` of `a` and `c` is what we need in that case.
 This brings us down to **189/181**:
@@ -580,7 +580,7 @@ gave up there.
 ## Postmortem
 
 After the CTF concluded, we found only one other writeup of this problem by
-@ldruschk, which you can find [here](ldruschkwriteup). One thing which surprised
+@ldruschk, which you can find [here][ldruschkwriteup]. One thing which surprised
 us was the following quote:
 
 > However, as it turned out the checker service does not actually supply strings
