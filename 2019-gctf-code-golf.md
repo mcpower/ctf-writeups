@@ -336,9 +336,9 @@ We don't seem like we're getting anywhere close to the target 181 characters.
 What's especially annoying is the amount of code we have for doing the merge
 operation...
 
-What if we wrote our own `zip_longest` function from scratch? In fact, as we're
+What if we wrote our own `zipLongest` function from scratch? In fact, as we're
 `mapM`'ing `r` onto the result of the `zipLongest`, we may as well write a
-function `String -> String -> [String]` which does the zipLongest as well as
+function `String -> String -> [String]` which does the `zipLongest` as well as
 the "merge" operation that `r` does.
 
 Writing this naively gets us a nice **221/181**:
