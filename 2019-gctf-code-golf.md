@@ -67,8 +67,8 @@ the encoded source to the server.
 
 Our first attempt was to generate **all** possible offsets. That is, assign each
 transparency with an offset in the range
-`[0, ..., sum of lengths of transparencies]`, combine them together, then take the
-best of the valid combinations.
+`[0, ..., sum of lengths of transparencies]`, combine them together, then take
+the best of the valid combinations.
 
 Our initial code looked a bit like:
 
@@ -641,7 +641,7 @@ g=(""?)
 
 We submitted this solution... **and got the flag**.
 
-Did we misread the task wrong? It mentioned:
+Did we misread the task? It mentioned:
 
 > The correct offset will minimize the length of the final text after trimming
 > leading and trailing spaces.
@@ -725,6 +725,19 @@ g=(""?).filter(>"").(u.u<$>)
 ```
 
 Unsurprisingly, this code still fails to pass the judge.
+
+Removing the stripping code gives us a surprisingly light solution at
+**127/181** characters:
+
+```haskell
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?delete d z|d<-"":z,x:p<-c#d]
+g=(""?)
+```
+
+which passes the (flawed) judge.
 
 [cgse]: https://codegolf.stackexchange.com/questions/19255/tips-for-golfing-in-haskell
 [iflist]: https://codegolf.stackexchange.com/a/150792
