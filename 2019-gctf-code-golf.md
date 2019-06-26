@@ -491,7 +491,7 @@ q=(<'!')
 (a:b)#(c:d)=[max a c:x|q a||q c,x<-b#d]
 a#b=[a++b]
 c?[]=c
-c?z=minimumBy(comparing(\x->(length$dropWhile q$dropWhileEnd q$x,x)))[x:p?delete d z|d<-"":z,x:p<-c#d]
+c?z=minimumBy(comparing(\x->(length x,x)))[x:p?delete d z|d<-"":z,x:p<-c#(dropWhile q$dropWhileEnd q$d)]
 g=(""?)
 ```
 
@@ -599,12 +599,12 @@ but they could not submit it as it was 5 characters over the limit.
 Under close inspection, @ldruschk seems to use a similar function to our `(#)`
 which we've golfed down quite a bit. Using a few of our own observations, we
 managed to golf @ldruschk "fixed" version down to something submittable
-(**169/181**):
+(**168/181**):
 
 ```haskell
 (x:a)#(y:b)=max x y:a#b
 x#y=x++y
-u=reverse.dropWhile(==' ')
+u=reverse.dropWhile(<'!')
 g=head.sortOn(0<$).sort.map(foldl(\r->(#r).until(and.zipWith(((<'!').).min)r)(' ':))"").permutations.map(u.u)
 ```
 
@@ -647,14 +647,14 @@ Did we misread the task wrong? It mentioned:
 > leading and trailing spaces.
 
 What if we only trim leading and trailing spaces when calculating the length of
-the strings, and not trim trailing spaces of the strings themselves? We need to
+the strings, and not trim spaces of the strings themselves? We need to
 use @ldruschk's solution for this, as our solution cannot handle minimising
-the length of trimmed strings (**165/181**):
+the length of trimmed strings (**164/181**):
 
 ```haskell
 (x:a)#(y:b)=max x y:a#b
 x#y=x++y
-u=reverse.dropWhile(==' ')
+u=reverse.dropWhile(<'!')
 g=head.sortOn((0<$).u.u).sort.map(foldl1(\r->(#r).until(and.zipWith(((<'!').).min)r)(' ':))).permutations
 ```
 
@@ -662,7 +662,7 @@ The judge returns "incorrect output" for this solution. Therefore, the task
 description is definitely misleading - solutions should *never* trim leading and
 trailing spaces.
 
-## Bonus: exfiltration with a working solution
+### Exfiltration with a working solution
 
 The judge **does** judge on more than one input. Changing `g` to be
 `g a=[x|length a<=4,x<-""?a]` on our working **161/181** solution returns the
@@ -670,6 +670,61 @@ flag, `g a=[x|length a<=3,x<-""?a]` gives an incorrect answer, and
 `g a=[x|length a==4,x<-""?a]` gives an incorrect answer too. Therefore, all
 inputs have length less than 4, there is at least one input with length 4,
 and there is at least one input with length not equal to 4.
+
+### Further improvements to our solution
+
+Using some observations from @ldruschk's writeup, we can get our (presumably 
+working) **179/181** solution down smaller. Instead of
+`minimumBy(comparing(\x->(length x,x)))`, using the head of a sorted list is
+much shorter, shortening our solution down to **162/181**:
+
+```haskell
+q=(<'!')
+(a:b)#(c:d)=[max a c:x|q a||q c,x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?delete d z|d<-"":z,x:p<-c#(dropWhile q$dropWhileEnd q$d)]
+g=(""?)
+```
+
+Additionally, their "string trim" function is a bit shorter, saving a character
+(**161/181**):
+
+```haskell
+q=(<'!')
+u=reverse.dropWhile q
+(a:b)#(c:d)=[max a c:x|q a||q c,x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?delete d z|d<-"":z,x:p<-c#(u$u$d)]
+g=(""?)
+```
+
+As `q` is not used as often now, we can remove the definition of `q` and do a
+bit of tweaking to get it down to **159/181**:
+
+```haskell
+u=reverse.dropWhile(<'!')
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?delete d z|d<-"":z,x:p<-c#(u$u$d)]
+g=(""?)
+```
+
+With these character savings, we can fix the crash mentioned in "Debugging the
+second attempt" and still be inside the character limit with **174/181**:
+
+```haskell
+u=reverse.dropWhile(<'!')
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?delete d z|d<-"":z,x:p<-c#d]
+g=(""?).filter(>"").(u.u<$>)
+```
+
+Unsurprisingly, this code still fails to pass the judge.
 
 [cgse]: https://codegolf.stackexchange.com/questions/19255/tips-for-golfing-in-haskell
 [if-list]: https://codegolf.stackexchange.com/a/150792
