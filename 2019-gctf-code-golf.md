@@ -641,7 +641,7 @@ g=(""?)
 
 We submitted this solution... **and got the flag**.
 
-Did we misread the task? It mentioned:
+Did we all misinterpret the task? Rule 2 states:
 
 > The correct offset will minimize the length of the final text after trimming
 > leading and trailing spaces.
@@ -670,6 +670,11 @@ flag, `g a=[x|length a<=3,x<-""?a]` gives an incorrect answer, and
 `g a=[x|length a==4,x<-""?a]` gives an incorrect answer too. Therefore, all
 inputs have length less than 4, there is at least one input with length 4,
 and there is at least one input with length not equal to 4.
+
+Using a similar method, we can also deduce that at least one of the inputs has a
+string with leading spaces. Interestingly, trimming *only* leading spaces with
+our solution or @ldruschk's solution allows both solutions to pass the judge's
+test cases.
 
 ### Further improvements to our solution
 
