@@ -744,7 +744,37 @@ g=(""?)
 
 which passes the (flawed) judge.
 
+### @doublestandardctf's write-up
+
+A few days later, we managed to come across @doublestandardctf's write-up
+of this problem which you can find [here][doublestandardwriteup].
+
+Their "first accepted code" is surprisingly similar to ours! One optimisation
+they used (which we missed) is using `(\\)` over using `delete`.
+Using this optimisation allows us to save an additional two characters,
+resulting in **172/181** for the bugless version of our code:
+
+```haskell
+u=reverse.dropWhile(<'!')
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?(z\\[d])|d<-"":z,x:p<-c#d]
+g=(""?).filter(>"").(u.u<$>)
+```
+
+and **125/181** for the judge-approved version of our code:
+
+```haskell
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?(z\\[d])|d<-"":z,x:p<-c#d]
+g=(""?)
+```
+
 [cgse]: https://codegolf.stackexchange.com/questions/19255/tips-for-golfing-in-haskell
 [iflist]: https://codegolf.stackexchange.com/a/150792
 [spaceless]: https://codegolf.stackexchange.com/a/52942
 [ldruschkwriteup]: https://github.com/ldruschk/ctf-writeups/blob/master/2019_googlectf_code_golf.md
+[doublestandardwriteup]: https://github.com/doublestandardctf/GoogleCTF2019/blob/master/Code-Golf.md
