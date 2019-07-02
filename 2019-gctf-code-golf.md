@@ -744,7 +744,7 @@ g=(""?)
 
 which passes the (flawed) judge.
 
-### @doublestandardctf's write-up
+### Update (2019-07-02): @doublestandardctf's write-up
 
 A few days later, we managed to come across @doublestandardctf's write-up
 of this problem which you can find [here][doublestandardwriteup].
@@ -771,6 +771,19 @@ a#b=[a++b]
 c?[]=c
 c?z=head$sortOn(0<$)$sort[x:p?(z\\[d])|d<-"":z,x:p<-c#d]
 g=(""?)
+```
+
+After staring at the bugless version of the code, we realised that the filter
+and map can be done more concisely with a list comprehension, saving another
+two characters for **170/181**:
+
+```haskell
+u=reverse.dropWhile(<'!')
+(a:b)#(c:d)=[max a c:x|min a c<'!',x<-b#d]
+a#b=[a++b]
+c?[]=c
+c?z=head$sortOn(0<$)$sort[x:p?(z\\[d])|d<-"":z,x:p<-c#d]
+g x=""?[s|s<-u.u<$>x,s>""]
 ```
 
 [cgse]: https://codegolf.stackexchange.com/questions/19255/tips-for-golfing-in-haskell
